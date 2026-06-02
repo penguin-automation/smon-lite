@@ -1,12 +1,25 @@
 {
   "name": "smon-lite",
   "version": "1.0.0",
+  "description": "Lightweight CLI system monitor built with Node.js. No dependencies!",
+  "author": "penguin-automation",
+  "license": "MIT",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "bin": {
+    "smon": "index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  "scripts": {
+    "start": "node index.js",
+    "watch": "node index.js --watch",
+    "json": "node index.js --json",
+    "test": "node index.js && node index.js --json"
+  },
+  "keywords": [
+    "system-monitor",
+    "cli",
+    "nodejs",
+    "cpu",
+    "memory",
+    "monitor"
+  ]
 }
