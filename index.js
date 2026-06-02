@@ -6,7 +6,7 @@ function formatBytes(bytes) {
     return (bytes / 1024 / 1024).toFixed(2) + " MB";
 }
 
-function memoryBar(used,total) {
+function memoryBar(used, total) {
     const percent = used / total;
     const width = 30;
     const filled = Math.round(width * percent);
@@ -42,14 +42,14 @@ function getCPUUsage() {
 
         totalDiff += currTotal - prevTotal;
         idleDiff += curr.idle - prev.idle;
-   }
+    }
 
     lastCPU = currentCPU;
 
-    return (1 - idleDiff / totalDiff) * 100;
+    return totalDiff === 0 ? 0 : (1 - idleDiff / totalDiff) * 100;
 }
 
-function showSystemInfo(jsonMode=false) {
+function showSystemInfo(jsonMode = false) {
     const totalMem = os.totalmem();
     const freeMem = os.freemem();
     const usedMem = totalMem - freeMem;
@@ -65,10 +65,10 @@ function showSystemInfo(jsonMode=false) {
                 free: freeMem,
                 total: totalMem
             },
-            cpu_usage_percent: cpuUSage.toFixed(2)
+            cpu_usage_percent: cpuUsage.toFixed(2)
         }, null, 2));
         return;
-   }
+    }
 
     console.clear();
     console.log("🐧 SMON-LITE\n");
@@ -90,8 +90,13 @@ function showSystemInfo(jsonMode=false) {
 const isWatch = process.argv.includes("--watch");
 const isJSON = process.argv.includes("--json");
 
-if (isWatch){
-    setInterval(showSystemInfo, 1000);
+if (isWatch) {
+    const interval = setInterval(() => showSystemInfo(isJSON), 1000);
+    process.on("SIGINT", () => {
+        clearInterval(interval);
+        console.log("\n🛑 Monitor stopped.");
+        process.exit(0);
+    });
 } else {
     showSystemInfo(isJSON);
 }
